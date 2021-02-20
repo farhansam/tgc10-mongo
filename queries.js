@@ -115,3 +115,182 @@ db.listingsAndReviews.find({
     beds: 1,
     'address.country': 1
 }).pretty();
+
+// find all listings that allowed pets
+db.listingsAndReviews.find({
+    'amenities':'Pets allowed'
+}, {
+    name: 1,
+    'amenities': 1
+}).pretty();
+
+// find all listings that have pets allowed
+// and pets live on this property
+db.listingsAndReviews.find({
+    'amenities': {
+        '$all':['Pets allowed', 'Pets live on this property', 'Dog(s)', 'Cat(s)']
+    }
+}, {
+    name: 1,
+    'amenities': 1
+}).pretty();
+
+// count how many listings
+// that have dogs and cats
+db.listingsAndReviews.find({
+    'amenities': {
+        '$all':['Pets allowed', 'Pets live on this property', 'Dog(s)', 'Cat(s)']
+    }
+}, {
+    name: 1,
+    'amenities': 1
+}).count();
+
+// find listings that have either dogs or cats
+db.listingsAndReviews.find({
+    'amenities': {
+        '$in':['Dog(s)', 'Cat(s)']
+    }
+}, {
+    name: 1,
+    'amenities': 1
+}).pretty();
+
+// select a document by Object ID
+use sample_mflix
+db.movies.find({
+    "_id":ObjectId("573a1390f29313caabcd4135")
+}).pretty()
+
+// how to find by a substring
+// eg. look for all the lisitngs that have the
+// word "spacious" in the name and in Brazil
+use sample_airbnb
+db.listingsAndReviews.find({
+    'name': {
+        '$regex':'spacious', '$options':'i'
+    },
+    'address.country':'Brazil'
+}, {
+    name: 1,
+    'address.country': 1
+}).pretty();
+
+// sample hands on
+
+//sample_restaurants
+use sample_restaurants
+
+// qn 1
+db.restaurants.find({
+    'cuisine': 'Hamburgers'
+}, {
+    name: 1,
+    cuisine: 1
+}).pretty()
+
+// qn 2
+db.restaurants.find({
+    'cuisine': 'American',
+    'borough': 'Bronx'
+}, {
+    name: 1,
+    cuisine: 1,
+    borough: 1
+}).pretty()
+
+// qn 3
+db.restaurants.find({
+    'address.street':'Stillwell Avenue'
+}, {
+    name: 1,
+    'address.street': 1
+}).pretty()
+
+// sample_mflix
+use sample_mflix
+
+// qn 1
+db.movies.find({
+    type:'movie'
+}).count()
+
+db.movies.find({
+    type: {
+        '$not':{
+            '$in':['movie']
+        }
+    }
+}, {
+        title: 1,
+        type: 1
+}).pretty()
+
+// qn 2
+db.movies.find({
+    year: {
+        '$lt': 2000
+    }
+}).count()
+
+// qn 3
+db.movies.find({
+    'countries': {
+        '$in': ['USA']
+    }
+}, {
+    title: 1,
+    countries: 1
+}).pretty().limit(10)
+
+// qn 4
+db.movies.find({
+    'countries': {
+        '$not': {
+            '$in': ['USA']
+        }
+    }
+}, {
+    title: 1,
+    countries: 1
+}).pretty().limit(10)
+
+// qn 5
+db.movies.find({
+    'awards.wins': {
+        '$gte': 3
+    }
+}, {
+    title: 1,
+    'awards.wins': 1
+}).pretty()
+
+// qn 6
+db.movies.find({
+    'awards.nominations': {
+        '$gte': 3
+    }
+}, {
+    title: 1,
+    'awards.nominations': 1
+}).pretty()
+
+// qn 7
+db.movies.find({
+    cast: {
+        '$in': ['Tom Cruise']
+    }
+}, {
+    title: 1,
+    cast: 1
+}).pretty()
+
+// qn 8
+db.movies.find({
+    directors: {
+        '$in': ['Charles Chaplin']
+    }
+}, {
+    title: 1,
+    directors: 1
+}).pretty()
