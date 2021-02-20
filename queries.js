@@ -294,3 +294,173 @@ db.movies.find({
     title: 1,
     directors: 1
 }).pretty()
+
+// Creating our own database in mongo
+
+// 1. use <name of the new database>
+// 2. insert a document into a new collection
+use tgc10_shelter
+db.animals.insert({
+    'name':'Fluffy',
+    'age': 3,
+    'breed': 'Golden Retriever',
+    'type':'Dog'
+})
+
+// insert many
+db.animals.insertMany([
+    {
+        'name':'Dazzy',
+        'age': 4,
+        'breed': 'Greyhound',
+        'type': 'Dog'
+    },
+    {
+        'name':'Timmy',
+        'age': 5,
+        'breed': 'Border Collie',
+        'type': 'Dog'
+    },
+    {
+        'name':'Fishy',
+        'age': 1,
+        'breed': 'Goldfish',
+        'type': 'Fish'
+    }
+])
+
+// update by providing A NEW DOCUMENT
+// HTTP RESTFUL - PUT
+db.animals.update({
+    '_id':ObjectId("6030bdf6c549e33bd9b36e73")
+}, {
+    "name" : "Timmy",
+    "age" : 1.5,
+    "breed" : "Border Collie",
+    "type" : "Dog"
+})
+
+// update by modifying a key
+// HTTP RESTFUL - PATCH
+db.animals.update({
+        '_id':ObjectId("6030bdf6c549e33bd9b36e73")
+}, {
+    '$set': {
+        'name':'Thunder'
+    }
+})
+
+// DELETE
+db.animals.remove({
+    '_id': ObjectId("6030bdf6c549e33bd9b36e74")
+})
+
+// hands on 
+
+// qn 1
+use fake_school
+
+// qn 2
+db.students.insert({
+    'name': 'Jane Doe',
+    'age': 13,
+    'subjects': 'Defense Against the Dark Arts, Charms, History of Magic',
+    'date enrolled':'13th May 2016'
+})
+
+// qn 3
+db.students.insertMany([
+    {
+        'name': 'James Verses',
+        'age': 14,
+        'subjects': 'Transfiguration, Alchemy',
+        'date enrolled': '15th June 2015'
+    },
+    {
+        'name': 'Jonathan Goh',
+        'age': 12,
+        'subjects': 'Divination, Study of Ancient Runes',
+        'date enrolled': '16th April 2017'
+    }
+])
+
+// qn 4
+db.students.update({
+        '_id':ObjectId("6030c2aac549e33bd9b36e76")
+}, {
+    '$set': {
+        'age': 13
+    }
+})
+
+// qn 5
+db.students.update({
+    '_id':ObjectId("6030c19ec549e33bd9b36e75")
+}, {
+    "name": "Jane Doe Jr",
+    "age": 11,
+    "subjects": "Defense Against the Dark Arts, Charms, History of Magic",
+    "date enrolled":"13th May 2016"
+})
+
+// qn 6
+db.students.remove({
+    '_id': ObjectId("6030c2aac549e33bd9b36e77")
+})
+
+// add embedded documents
+db.animals.insert({
+    'name':'Cookie',
+    'age': 3,
+    'breed':'Lab Retriever',
+    'type':'Dog',
+    'checkups':[
+        {
+            'id':ObjectId(),
+            'name': 'Dr Chua',
+            'diagnosis':'Heartworms',
+            'treatment':'Steroids'
+        }
+    ]
+})
+
+// add a new checkup to cookie
+db.animals.update({
+    '_id':ObjectId("6030c9dcc549e33bd9b36e79"),
+}, {
+    '$push': {
+        'checkups': {
+            '_id':ObjectId(),
+            'name':'Dr Tan',
+            'diagnosis':'Diabetes',
+            'treatment':'Medication'
+        }
+    }
+})
+
+// update checkup
+db.animals.update({
+    'checkups._id': ObjectId("6030caa2c549e33bd9b36e7a")
+}, {
+    '$set': {
+        'checkups.$.diagnosis':'Stomach Ulcers',
+        'checkups.$.treatment': 'Drink more water'
+    }
+})
+
+// remove checkup
+db.animals.update({
+    '_id':ObjectId("6030c9dcc549e33bd9b36e79")
+}, {
+    '$pull': {
+        'checkups': {
+              '_id':ObjectId("6030c9dcc549e33bd9b36e78")
+        }
+    }
+})
+
+
+
+
+
+
